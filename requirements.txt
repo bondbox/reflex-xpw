@@ -1,0 +1,3 @@
+xkits-config>=0.3
+reflex>=0.8.1
+xpw>=0.15.1
