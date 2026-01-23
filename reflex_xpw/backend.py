@@ -1,11 +1,26 @@
+from dataclasses import dataclass
 from typing import Any
 from typing import Dict
 
 import reflex as rx
 
 
+@dataclass
+class EndUser():
+
+    session_id: str
+    secret_key: str
+
+    @classmethod
+    def nobody(cls, **kwargs: Any):
+        kwargs["session_id"] = ""
+        kwargs["secret_key"] = ""
+        return cls(**kwargs)
+
+
 class AuthState(rx.State):
-    pass
+    session_id: str = rx.LocalStorage(name="_session_id")
+    secret_key: str = rx.LocalStorage(name="_secret_key")
 
 
 class LoginState(AuthState):

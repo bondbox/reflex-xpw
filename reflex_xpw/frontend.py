@@ -66,6 +66,6 @@ class LoginPage(BasePage):
         return super().build(
             rx.card(
                 self.LoginForm.build(),
-                width=["80vh", "60vh", "30vh"],   # mobile / tablet / desktop
+                width=["80%", "50%", "20%"],   # mobile / tablet / desktop
             ),
         )
