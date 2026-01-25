@@ -1,26 +1,40 @@
-from dataclasses import dataclass
 from typing import Any
 from typing import Dict
+from typing import Optional
 
 import reflex as rx
-
-
-@dataclass
-class EndUser():
-
-    session_id: str
-    secret_key: str
-
-    @classmethod
-    def nobody(cls, **kwargs: Any):
-        kwargs["session_id"] = ""
-        kwargs["secret_key"] = ""
-        return cls(**kwargs)
+from xpw import Account
+from xpw import Profile
+from xpw import Secret
+from xpw import SessionID
+from xpw import SessionUser
 
 
 class AuthState(rx.State):
-    session_id: str = rx.LocalStorage(name="_session_id")
-    secret_key: str = rx.LocalStorage(name="_secret_key")
+    K_SESSION_ID = "SESSION_ID"
+    K_SECRET_KEY = "SECRET_KEY"
+
+    V_SESSION_ID: str = rx.Cookie("", name=K_SESSION_ID)
+    V_SECRET_KEY: str = rx.Cookie("", name=K_SECRET_KEY)
+
+    @property
+    def session_id(self) -> str:
+        return self.V_SESSION_ID or SessionID.generate()
+
+    @property
+    def secret_key(self) -> str:
+        return self.V_SECRET_KEY or Secret.generate().key
+
+    def activate(self, username: str, password: str) -> Optional[SessionUser]:  # noqa:E501
+        return access.login(username, password, self.session_id, self.secret_key or Secret.generate().key)  # noqa:E501
+
+    def deactivate(self) -> bool:
+        rx.remove_cookie("auth_token")
+        return access.logout(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+
+    @property
+    def identify(self) -> Optional[Profile]:
+        return access.fetch(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
 
 
 class LoginState(AuthState):
@@ -38,9 +52,13 @@ class LoginState(AuthState):
         self.error_message = ""
         username: str = form_data["username"]
         password: str = form_data["password"]
+
+        print(f"session_id: {self.session_id}")
+        print(f"secret_key: {self.secret_key}")
         print(f"Login: {username} {password}")
-        print(self.router.url.query)
-        print(self.router.url.path)
+        # print(self.router.url.query)
+        # print(self.router.url.path)
+
         # with rx.session() as session:
         #     user = session.exec(
         #         select(LocalUser).where(LocalUser.username == username)
