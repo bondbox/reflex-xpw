@@ -14,23 +14,24 @@ class AuthState(rx.State):
     K_SESSION_ID = "SESSION_ID"
     K_SECRET_KEY = "SECRET_KEY"
 
-    V_SESSION_ID: str = rx.Cookie("", name=K_SESSION_ID)
-    V_SECRET_KEY: str = rx.Cookie("", name=K_SECRET_KEY)
-
     @property
     def session_id(self) -> str:
-        return self.V_SESSION_ID or SessionID.generate()
+        return rx.get_cookie(key=self.K_SESSION_ID) or SessionID.generate()
 
     @property
     def secret_key(self) -> str:
-        return self.V_SECRET_KEY or Secret.generate().key
+        return rx.get_cookie(key=self.K_SECRET_KEY) or Secret.generate().key
 
     def activate(self, username: str, password: str) -> Optional[SessionUser]:  # noqa:E501
-        return access.login(username, password, self.session_id, self.secret_key or Secret.generate().key)  # noqa:E501
+        if user := access.login(username, password, self.session_id, self.secret_key):  # noqa:E501
+            rx.set_cookie(key=self.K_SESSION_ID, value=user.session_id)
+            rx.set_cookie(key=self.K_SECRET_KEY, value=user.secret_key)
+            return user
 
     def deactivate(self) -> bool:
-        rx.remove_cookie("auth_token")
-        return access.logout(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+        if access.logout(session_id=self.session_id, secret_key=self.secret_key):  # noqa:E501
+            rx.remove_cookie(key=self.K_SESSION_ID)
+            rx.remove_cookie(key=self.K_SECRET_KEY)
 
     @property
     def identify(self) -> Optional[Profile]:
