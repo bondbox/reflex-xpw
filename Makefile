@@ -44,7 +44,7 @@ reinstall: uninstall install
 
 
 test-prepare:
-	python3 -m pip install --upgrade mock pylint flake8 pytest pytest-cov
+	python3 -m pip install --upgrade mock pylint flake8 pytest pytest-cov -r requirements-test.txt
 pylint:
 	pylint $(shell git ls-files reflex_xpw/*.py)
 flake8:
@@ -53,6 +53,6 @@ flake8:
 pytest:
 	pytest --cov=reflex_xpw --cov-report=term-missing --cov-report=xml --cov-report=html --cov-config=.coveragerc --cov-fail-under=100
 pytest-clean:
-	rm -rf .pytest_cache
-test: test-prepare pylint flake8
+	rm -rf .pytest_cache .states .web
+test: test-prepare pylint flake8 pytest
 test-clean: pytest-clean
