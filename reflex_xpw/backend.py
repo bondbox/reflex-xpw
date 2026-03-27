@@ -9,9 +9,17 @@ from xpw import Pass
 from xpw import Profile
 from xpw import SessionUser
 
+from .settings import CONFIG
 from .settings import ROUTES
 
-access = Account.from_file()
+_access_: Optional[Account] = None
+
+
+def get_access() -> Account:
+    global _access_  # pylint: disable=global-statement
+    if _access_ is None:
+        _access_ = Account.from_file(config=CONFIG.config_file)
+    return _access_
 
 
 class AuthState(rx.State):
@@ -22,7 +30,7 @@ class AuthState(rx.State):
     secret_key: str = rx.Cookie(name=K_SECRET_KEY)
 
     def activate(self, username: str, password: str) -> Optional[SessionUser]:  # noqa:E501
-        if user := access.login(username, password, self.session_id, self.secret_key):  # noqa:E501
+        if user := get_access().login(username, password, self.session_id, self.secret_key):  # noqa:E501
             self.session_id = user.session_id
             self.secret_key = user.secret_key
             return user
@@ -30,7 +38,7 @@ class AuthState(rx.State):
         return None
 
     def deactivate(self) -> bool:
-        if access.logout(session_id=self.session_id, secret_key=self.secret_key):  # noqa:E501
+        if get_access().logout(session_id=self.session_id, secret_key=self.secret_key):  # noqa:E501
             self.secret_key = Pass.random_generate(64).value
             return True
 
@@ -38,11 +46,11 @@ class AuthState(rx.State):
 
     @property
     def identify(self) -> Optional[Profile]:
-        return access.fetch(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+        return get_access().fetch(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
 
     @rx.var(cache=True, interval=timedelta(seconds=180), initial_value=False)
     def authenticated(self) -> bool:
-        return access.check(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+        return get_access().check(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
 
 
 class LoginState(AuthState):

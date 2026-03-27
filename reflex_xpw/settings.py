@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from xkits_config import Settings
 
@@ -13,3 +14,14 @@ class Routes(Settings):
 
 
 ROUTES: Routes = Routes()
+
+
+@dataclass
+class Configuration(Settings):
+    # Environment Variable Prefix
+    ENVAR_PREFIX = "REFLEX_XPW"
+
+    config_file: Optional[str] = None
+
+
+CONFIG: Configuration = Configuration()
