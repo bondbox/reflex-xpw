@@ -1,4 +1,5 @@
 from datetime import timedelta
+from functools import lru_cache
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -12,14 +13,10 @@ from xpw import SessionUser
 from .settings import CONFIG
 from .settings import ROUTES
 
-_access_: Optional[Account] = None
 
-
+@lru_cache(maxsize=1)
 def get_access() -> Account:
-    global _access_  # pylint: disable=global-statement
-    if _access_ is None:
-        _access_ = Account.from_file(config=CONFIG.config_file)
-    return _access_
+    return Account.from_file(config=CONFIG.config_file)
 
 
 class AuthState(rx.State):
