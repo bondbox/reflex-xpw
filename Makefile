@@ -43,7 +43,7 @@ uninstall:
 reinstall: uninstall install
 
 
-test-prepare:
+test-prepare: build-prepare
 	python3 -m pip install --upgrade mock pylint flake8 pytest pytest-cov -r requirements-test.txt
 pylint:
 	pylint $(shell git ls-files reflex_xpw/*.py)
