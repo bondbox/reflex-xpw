@@ -3,10 +3,10 @@ from .backend import LogoutState
 from .frontend import LoginPage
 from .frontend import LogoutPage
 from .frontend import require_login
-from .settings import ROUTES
+from .settings import CONFIG
 
 __all__ = [
-    "ROUTES",
+    "CONFIG",
     "LoginPage",
     "LogoutPage",
     "LoginState",

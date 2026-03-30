@@ -5,7 +5,7 @@ import reflex as rx
 
 from .backend import LoginState
 from .backend import LogoutState
-from .settings import ROUTES
+from .settings import CONFIG
 
 
 def require_login(page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:
@@ -99,7 +99,7 @@ class LoginPage(BasePage):
             )
 
     def mount(self, app: rx.App, title: Optional[str] = None) -> None:
-        app.add_page(self.build, route=ROUTES.login, title=title or self.TITLE)
+        app.add_page(self.build, route=CONFIG.routes.login, title=title or self.TITLE)  # noqa:E501
 
     def build(self) -> rx.Component:
         return self.center(
@@ -114,7 +114,7 @@ class LogoutPage(BasePage):
     TITLE: str = "Logout"
 
     def mount(self, app: rx.App, title: Optional[str] = None) -> None:
-        app.add_page(self.build, route=ROUTES.logout,
+        app.add_page(self.build, route=CONFIG.routes.logout,
                      title=title or self.TITLE,
                      on_load=LogoutState.on_load)
 

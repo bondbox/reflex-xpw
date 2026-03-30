@@ -11,7 +11,6 @@ from xpw import Profile
 from xpw import SessionUser
 
 from .settings import CONFIG
-from .settings import ROUTES
 
 
 @lru_cache(maxsize=1)
@@ -93,12 +92,12 @@ class LoginState(AuthState):
             # wait until after hydration to ensure auth_token is known
             return self.redirect()  # pragma: no cover
 
-        if (active_path := self.router.url.path) == ROUTES.login and self.authenticated:  # noqa:E501
+        if (active_path := self.router.url.path) == CONFIG.routes.login and self.authenticated:  # noqa:E501
             source_path: str = self.router.url.query_parameters.get("src", "/")
             return rx.redirect(source_path)
 
-        if active_path != ROUTES.login and not self.authenticated:
-            return rx.redirect(f"{ROUTES.login}?src={active_path}")
+        if active_path != CONFIG.routes.login and not self.authenticated:
+            return rx.redirect(f"{CONFIG.routes.login}?src={active_path}")
 
         return None
 
@@ -111,7 +110,7 @@ class LogoutState(AuthState):
 
     @rx.event
     def on_load(self):
-        if self.router.url.path == ROUTES.logout and self.deactivate():
+        if self.router.url.path == CONFIG.routes.logout and self.deactivate():
             source_path: str = self.router.url.query_parameters.get("src", "/")
             return rx.redirect(source_path)
 

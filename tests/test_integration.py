@@ -17,7 +17,7 @@ from selenium.webdriver.support.expected_conditions import \
 from selenium.webdriver.support.ui import WebDriverWait
 
 from reflex_xpw.backend import get_access
-from reflex_xpw.settings import ROUTES
+from reflex_xpw.settings import CONFIG
 
 os.environ["APP_HARNESS_HEADLESS"] = "true"
 
@@ -30,8 +30,8 @@ class TestApp(TestCase):
         cls.harness.start()
 
         assert (frontend_url := cls.harness.frontend_url) is not None
-        cls.logout_url = urljoin(frontend_url, ROUTES.logout)
-        cls.login_url = urljoin(frontend_url, ROUTES.login)
+        cls.logout_url = urljoin(frontend_url, CONFIG.routes.logout)
+        cls.login_url = urljoin(frontend_url, CONFIG.routes.login)
         cls.index_url = urljoin(frontend_url, "index")
         cls.frontend_url = frontend_url
 
@@ -78,13 +78,13 @@ class TestApp(TestCase):
     def test_hello_page(self):
         self.driver.get(url := urljoin(self.frontend_url, "hello"))
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, ROUTES.login)}?src=/hello")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/hello")  # noqa:E501
         self.save_screenshot("hello_page_redirect_to_login.png")
 
     def test_index_page(self):
         self.driver.get(url := self.frontend_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, ROUTES.login)}?src=/")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
         self.save_screenshot("index_page_redirect_to_login.png")
 
     def test_login_input_username_is_empty(self):
@@ -106,7 +106,7 @@ class TestApp(TestCase):
     def test_login_and_logout(self):
         self.driver.get(url := self.frontend_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, ROUTES.login)}?src=/")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
 
         self.driver.find_element(By.ID, "username").send_keys(self.username)
         self.driver.find_element(By.ID, "password").send_keys(self.password)
@@ -127,7 +127,7 @@ class TestApp(TestCase):
 
         self.driver.get(url := self.logout_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, ROUTES.login)}?src=/")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
         self.save_screenshot("login_page.png")
 
     @mock.patch.object(get_access(), "logout", mock.MagicMock(return_value=False))  # noqa:E501
