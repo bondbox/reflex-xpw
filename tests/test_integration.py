@@ -16,7 +16,6 @@ from selenium.webdriver.support.expected_conditions import \
     presence_of_element_located
 from selenium.webdriver.support.ui import WebDriverWait
 
-from reflex_xpw.backend import get_access
 from reflex_xpw.settings import CONFIG
 
 os.environ["APP_HARNESS_HEADLESS"] = "true"
@@ -130,14 +129,14 @@ class TestApp(TestCase):
         self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
         self.save_screenshot("login_page.png")
 
-    @mock.patch.object(get_access(), "logout", mock.MagicMock(return_value=False))  # noqa:E501
+    @mock.patch.object(CONFIG.access, "logout", mock.MagicMock(return_value=False))  # noqa:E501
     def test_logout(self):
         self.driver.get(self.logout_url)
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "prompt")))  # noqa:E501
         self.assertEqual(self.driver.current_url, self.logout_url)
         self.save_screenshot("logout_page.png")
 
-    @mock.patch.object(get_access(), "logout", mock.MagicMock(return_value=False))  # noqa:E501
+    @mock.patch.object(CONFIG.access, "logout", mock.MagicMock(return_value=False))  # noqa:E501
     def test_logout_error(self):
         self.driver.get(self.login_url)
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "username"))).send_keys(self.username)  # noqa:E501

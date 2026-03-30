@@ -1,21 +1,14 @@
 from datetime import timedelta
-from functools import lru_cache
 from typing import Any
 from typing import Dict
 from typing import Optional
 
 import reflex as rx
-from xpw import Account
 from xpw import Pass
 from xpw import Profile
 from xpw import SessionUser
 
 from .settings import CONFIG
-
-
-@lru_cache(maxsize=1)
-def get_access() -> Account:
-    return Account.from_file(config=CONFIG.config_file)
 
 
 class AuthState(rx.State):
@@ -26,7 +19,7 @@ class AuthState(rx.State):
     secret_key: str = rx.Cookie(name=K_SECRET_KEY)
 
     def activate(self, username: str, password: str) -> Optional[SessionUser]:  # noqa:E501
-        if user := get_access().login(username, password, self.session_id, self.secret_key):  # noqa:E501
+        if user := CONFIG.access.login(username, password, self.session_id, self.secret_key):  # noqa:E501
             self.session_id = user.session_id
             self.secret_key = user.secret_key
             return user
@@ -34,7 +27,7 @@ class AuthState(rx.State):
         return None
 
     def deactivate(self) -> bool:
-        if get_access().logout(session_id=self.session_id, secret_key=self.secret_key):  # noqa:E501
+        if CONFIG.access.logout(session_id=self.session_id, secret_key=self.secret_key):  # noqa:E501
             self.secret_key = Pass.random_generate(64).value
             return True
 
@@ -42,11 +35,11 @@ class AuthState(rx.State):
 
     @property
     def identify(self) -> Optional[Profile]:
-        return get_access().fetch(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+        return CONFIG.access.fetch(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
 
     @rx.var(cache=True, interval=timedelta(seconds=180), initial_value=False)
     def authenticated(self) -> bool:
-        return get_access().check(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
+        return CONFIG.access.check(session_id=self.session_id, secret_key=self.secret_key)  # noqa:E501
 
 
 class LoginState(AuthState):
