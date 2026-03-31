@@ -2,6 +2,7 @@ import reflex as rx
 
 from reflex_xpw import LoginPage
 from reflex_xpw import LogoutPage
+from reflex_xpw import LogoutState
 from reflex_xpw import require_login
 
 
@@ -29,6 +30,7 @@ def hello_page() -> rx.Component:
 def index_page() -> rx.Component:
     return rx.vstack(
         rx.text("Demo APP", id="text"),
+        rx.button("Logout", id="logout", on_click=LogoutState.on_submit),
         width=["100%", "80%", "60%"],   # mobile / tablet / desktop
         padding=["1em", "2em", "4em"],
     )

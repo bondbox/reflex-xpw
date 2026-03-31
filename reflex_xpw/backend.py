@@ -99,7 +99,7 @@ class LogoutState(AuthState):
 
     @rx.event
     def on_submit(self):
-        assert self.deactivate()  # pragma: no cover
+        assert self.deactivate()
 
     @rx.event
     def on_load(self):

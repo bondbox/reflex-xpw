@@ -77,13 +77,13 @@ class TestApp(TestCase):
     def test_hello_page(self):
         self.driver.get(url := urljoin(self.frontend_url, "hello"))
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/hello")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/hello")  # noqa:E501
         self.save_screenshot("hello_page_redirect_to_login.png")
 
     def test_index_page(self):
         self.driver.get(url := self.frontend_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/")  # noqa:E501
         self.save_screenshot("index_page_redirect_to_login.png")
 
     def test_login_input_username_is_empty(self):
@@ -102,10 +102,10 @@ class TestApp(TestCase):
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "submit"))).click()  # noqa:E501
         self.save_screenshot("login_prompt_password_is_empty.png")
 
-    def test_login_and_logout(self):
+    def test_login_and_logout_click_button(self):
         self.driver.get(url := self.frontend_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/")
 
         self.driver.find_element(By.ID, "username").send_keys(self.username)
         self.driver.find_element(By.ID, "password").send_keys(self.password)
@@ -115,6 +115,23 @@ class TestApp(TestCase):
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url == url)
         self.assertEqual(self.driver.current_url, url)
         self.save_screenshot("login_successful.png")
+
+        WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "logout"))).click()  # noqa:E501
+        WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/")
+        self.save_screenshot("login_page.png")
+
+    def test_login_and_logout_url(self):
+        self.driver.get(url := self.frontend_url)
+        WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/")
+
+        self.driver.find_element(By.ID, "username").send_keys(self.username)
+        self.driver.find_element(By.ID, "password").send_keys(self.password)
+        self.driver.find_element(By.ID, "submit").click()
+
+        WebDriverWait(self.driver, 10).until(lambda d: d.current_url == url)
+        self.assertEqual(self.driver.current_url, url)
 
         self.driver.get(urljoin(self.frontend_url, "hello"))
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "text")))  # noqa:E501
@@ -126,8 +143,7 @@ class TestApp(TestCase):
 
         self.driver.get(url := self.logout_url)
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
-        self.assertEqual(self.driver.current_url, f"{urljoin(self.frontend_url, CONFIG.routes.login)}?src=/")  # noqa:E501
-        self.save_screenshot("login_page.png")
+        self.assertEqual(self.driver.current_url, f"{self.login_url}?src=/")
 
     @mock.patch.object(CONFIG.access, "logout", mock.MagicMock(return_value=False))  # noqa:E501
     def test_logout(self):
@@ -143,8 +159,8 @@ class TestApp(TestCase):
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "password"))).send_keys(self.password)  # noqa:E501
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "submit"))).click()  # noqa:E501
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url != self.login_url)  # noqa:E501
-        self.save_screenshot("logout_error_logged_in.png")
         self.assertEqual(self.driver.current_url, self.frontend_url)
+        self.save_screenshot("logout_error_logged_in.png")
 
         self.driver.get(self.logout_url)
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "prompt")))  # noqa:E501
