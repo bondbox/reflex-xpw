@@ -133,12 +133,14 @@ class TestApp(TestCase):
         WebDriverWait(self.driver, 10).until(lambda d: d.current_url == url)
         self.assertEqual(self.driver.current_url, url)
 
-        self.driver.get(urljoin(self.frontend_url, "hello"))
+        self.driver.get(url := urljoin(self.frontend_url, "hello"))
         WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "text")))  # noqa:E501
+        self.assertEqual(self.driver.current_url, url)
         self.save_screenshot("hello_page.png")
 
-        self.driver.get(self.frontend_url)
-        WebDriverWait(self.driver, 10).until(presence_of_element_located((By.ID, "text")))  # noqa:E501
+        self.driver.get(url := self.login_url)
+        WebDriverWait(self.driver, 10).until(lambda d: d.current_url != url)
+        self.assertEqual(self.driver.current_url, self.frontend_url)
         self.save_screenshot("index_page.png")
 
         self.driver.get(url := self.logout_url)

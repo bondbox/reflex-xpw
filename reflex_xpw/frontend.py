@@ -102,10 +102,14 @@ class LoginPage(BasePage):
         app.add_page(self.build, route=CONFIG.routes.login, title=title or self.TITLE)  # noqa:E501
 
     def build(self) -> rx.Component:
-        return self.center(
-            rx.card(
-                self.LoginForm.build(),
-                width=["80%", "50%", "20%"],   # mobile / tablet / desktop
+        return rx.cond(
+            LoginState.is_hydrated & LoginState.authenticated,
+            rx.fragment(on_mount=LoginState.redirect),
+            self.center(
+                rx.card(
+                    self.LoginForm.build(),
+                    width=["80%", "50%", "20%"],   # mobile / tablet / desktop
+                ),
             ),
         )
 
