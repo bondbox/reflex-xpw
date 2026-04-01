@@ -6,7 +6,7 @@ from unittest import main
 
 import reflex as rx
 
-from reflex_xpw.defender import require_login
+from reflex_xpw.defender import login_required
 
 
 class TestDefender(TestCase):
@@ -25,14 +25,14 @@ class TestDefender(TestCase):
     def tearDown(self):
         pass
 
-    def test_require_login_wrapped(self):
+    def test_login_required_wrapped(self):
 
         def original_page() -> rx.Component:
             return rx.text("Hello World")
 
-        protected_page = require_login(original_page)
+        protected_page = login_required(original_page)
         self.assertIs(unwrap(protected_page), original_page)
-        self.assertRaises(ValueError, require_login, protected_page)
+        self.assertRaises(ValueError, login_required, protected_page)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ import reflex as rx
 from .backend import LoginState
 
 
-def require_login(page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:
+def login_required(original_page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:  # noqa:E501
     """Decorator to require authentication before rendering a page.
 
     If the user is not authenticated, then redirect to the login page.
@@ -17,14 +17,14 @@ def require_login(page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:
     Returns:
         The wrapped page component.
     """
-    if unwrap(page) is not page:
-        raise ValueError(f"{page.__name__} is already wrapped.")
+    if unwrap(original_page) is not original_page:
+        raise ValueError(f"{original_page.__name__} is already wrapped.")
 
-    @wraps(page)
+    @wraps(original_page)
     def protected_page(*args, **kwargs):
         return rx.cond(
             LoginState.is_hydrated & LoginState.authenticated,
-            page(*args, **kwargs),
+            original_page(*args, **kwargs),
             rx.fragment(on_mount=LoginState.redirect),
         )
 
