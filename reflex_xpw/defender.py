@@ -1,4 +1,5 @@
 from functools import wraps
+from inspect import unwrap
 
 import reflex as rx
 
@@ -16,6 +17,8 @@ def require_login(page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:
     Returns:
         The wrapped page component.
     """
+    if unwrap(page) is not page:
+        raise ValueError(f"{page.__name__} is already wrapped.")
 
     @wraps(page)
     def protected_page(*args, **kwargs):
@@ -25,4 +28,5 @@ def require_login(page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:
             rx.fragment(on_mount=LoginState.redirect),
         )
 
+    setattr(protected_page, "__require_login__", True)
     return protected_page
