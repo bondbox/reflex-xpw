@@ -14,7 +14,6 @@ class BasePage():  # pylint: disable=too-few-public-methods
 
 
 class LoginPage(BasePage):
-    TITLE: str = "Login"
 
     class LoginForm():  # pylint: disable=too-few-public-methods
 
@@ -74,8 +73,12 @@ class LoginPage(BasePage):
                 on_submit=LoginState.on_submit,
             )
 
+    @property
+    def title(self) -> str:
+        return "Login"
+
     def mount(self, app: rx.App, title: Optional[str] = None) -> None:
-        app.add_page(self.build, route=CONFIG.routes.login, title=title or self.TITLE)  # noqa:E501
+        app.add_page(self.build, route=CONFIG.routes.login, title=title or self.title)  # noqa:E501
 
     def build(self) -> rx.Component:
         return rx.cond(
@@ -91,11 +94,14 @@ class LoginPage(BasePage):
 
 
 class LogoutPage(BasePage):
-    TITLE: str = "Logout"
+
+    @property
+    def title(self) -> str:
+        return "Logout"
 
     def mount(self, app: rx.App, title: Optional[str] = None) -> None:
         app.add_page(self.build, route=CONFIG.routes.logout,
-                     title=title or self.TITLE,
+                     title=title or self.title,
                      on_load=LogoutState.on_load)
 
     def build(self) -> rx.Component:
