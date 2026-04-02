@@ -1,14 +1,13 @@
 import reflex as rx
 
+from reflex_xpw import Defender
 from reflex_xpw import LoginPage
 from reflex_xpw import LogoutPage
 from reflex_xpw import LogoutState
-from reflex_xpw import login_required
-from reflex_xpw import no_login_required
 
 
 @rx.page(route="/about")
-@no_login_required
+@Defender.no_login_required
 def about_page() -> rx.Component:
     return rx.vstack(
         rx.text("Congratulations", id="text"),
@@ -18,7 +17,7 @@ def about_page() -> rx.Component:
 
 
 @rx.page(route="/hello")
-@login_required
+@Defender.login_required
 def hello_page() -> rx.Component:
     return rx.vstack(
         rx.text("Hello World", id="text"),
@@ -28,7 +27,7 @@ def hello_page() -> rx.Component:
 
 
 @rx.page(route="/")
-@login_required
+@Defender.login_required
 def index_page() -> rx.Component:
     return rx.vstack(
         rx.text("Demo APP", id="text"),

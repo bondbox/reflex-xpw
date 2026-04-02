@@ -6,8 +6,7 @@ from unittest import main
 
 import reflex as rx
 
-from reflex_xpw.defender import login_required
-from reflex_xpw.defender import no_login_required
+from reflex_xpw.defender import Defender
 
 
 def original_page() -> rx.Component:
@@ -31,14 +30,14 @@ class TestDefender(TestCase):
         pass
 
     def test_login_required_wrapped(self):
-        protected_page = login_required(original_page)
+        protected_page = Defender.login_required(original_page)
         self.assertIs(unwrap(protected_page), original_page)
-        self.assertRaises(ValueError, login_required, protected_page)
+        self.assertRaises(ValueError, Defender.login_required, protected_page)
 
     def test_no_login_required_wrapped(self):
-        public_page = no_login_required(original_page)
+        public_page = Defender.no_login_required(original_page)
         self.assertIs(unwrap(public_page), original_page)
-        self.assertRaises(ValueError, no_login_required, public_page)
+        self.assertRaises(ValueError, Defender.no_login_required, public_page)
 
 
 if __name__ == "__main__":
