@@ -1,5 +1,7 @@
 from functools import wraps
 from inspect import unwrap
+from typing import Any
+from typing import Callable
 
 import reflex as rx
 
@@ -11,19 +13,23 @@ class Defender:
     REQUIRE_LOGIN_ATTR = "__require_login__"
 
     @classmethod
+    def validate_unwrapped(cls, func: Callable[..., Any]) -> None:
+        if unwrap(func) is not func:
+            raise ValueError(f"{func.__name__} is already wrapped.")
+
+    @classmethod
     def login_required(cls, original_page: rx.app.ComponentCallable) -> rx.app.ComponentCallable:  # noqa:E501
         """Decorator to require authentication before rendering a page.
 
         If the user is not authenticated, then redirect to the login page.
 
         Args:
-            page: The page to wrap.
+            original_page: The page to wrap.
 
         Returns:
             The wrapped page component.
         """
-        if unwrap(original_page) is not original_page:
-            raise ValueError(f"{original_page.__name__} is already wrapped.")
+        cls.validate_unwrapped(func=original_page)
 
         @wraps(original_page)
         def protected_page(*args, **kwargs):
@@ -41,13 +47,12 @@ class Defender:
         """Decorator to mark the page as not requiring login.
 
         Args:
-            page: The page to wrap.
+            original_page: The page to wrap.
 
         Returns:
             The wrapped page component.
         """
-        if unwrap(original_page) is not original_page:
-            raise ValueError(f"{original_page.__name__} is already wrapped.")
+        cls.validate_unwrapped(func=original_page)
 
         @wraps(original_page)
         def public_page(*args, **kwargs):
