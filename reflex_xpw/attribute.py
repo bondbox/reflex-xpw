@@ -1,7 +1,7 @@
 # coding:utf-8
 
 __project__ = "reflex-xpw"
-__version__ = "0.1"
+__version__ = "0.2"
 __urlhome__ = "https://github.com/bondbox/reflex-xpw/"
 __description__ = "Simple access control for Reflex applications based on xpw"
 
