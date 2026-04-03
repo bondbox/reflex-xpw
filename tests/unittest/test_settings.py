@@ -1,12 +1,17 @@
 # coding:utf-8
 
+from os.path import dirname
+from os.path import join
+import sys
 from unittest import TestCase
 from unittest import main
 
 from xpw import Account
 
-from reflex_xpw.settings import CONFIG
-from reflex_xpw.settings import Routes
+sys.path.insert(0, join(dirname(__file__), "..", "..", "rxpw_backend"))
+
+from reflex_xpw_settings import CONFIG
+from reflex_xpw_settings import Routes
 
 
 class TestConfiguration(TestCase):

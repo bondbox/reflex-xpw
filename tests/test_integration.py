@@ -1,7 +1,10 @@
 # coding:utf-8
 
 import os
+from os.path import dirname
+from os.path import join
 from pathlib import Path
+import sys
 from unittest import TestCase
 from unittest import main
 from unittest import mock
@@ -16,7 +19,10 @@ from selenium.webdriver.support.expected_conditions import \
     presence_of_element_located
 from selenium.webdriver.support.ui import WebDriverWait
 
-from reflex_xpw.settings import CONFIG
+sys.path.insert(0, join(dirname(__file__), "..", "rxpw_backend"))
+sys.path.insert(0, join(dirname(__file__), "..", "rxpw_frontend"))
+
+from reflex_xpw_settings import CONFIG
 
 os.environ["APP_HARNESS_HEADLESS"] = "true"
 

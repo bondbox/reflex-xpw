@@ -4,8 +4,7 @@ from typing import Any
 from typing import Callable
 
 import reflex as rx
-
-from .backend import LoginState
+from reflex_xpw_backend import LoginState
 
 
 class Defender:
@@ -60,3 +59,6 @@ class Defender:
 
         setattr(public_page, cls.REQUIRE_LOGIN_ATTR, False)
         return public_page
+
+    def reinforce(self) -> None:
+        pass

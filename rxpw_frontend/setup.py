@@ -4,16 +4,15 @@ from os.path import dirname
 from os.path import join
 from urllib.parse import urljoin
 
-from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.install import install
 
-from reflex_xpw.attribute import __author__
-from reflex_xpw.attribute import __author_email__
-from reflex_xpw.attribute import __description__
-from reflex_xpw.attribute import __project__
-from reflex_xpw.attribute import __urlhome__
-from reflex_xpw.attribute import __version__
+from attribute import __author__
+from attribute import __author_email__
+from attribute import __description__
+from attribute import __project__
+from attribute import __urlhome__
+from attribute import __version__
 
 __urlcode__ = __urlhome__
 __urldocs__ = __urlhome__
@@ -25,8 +24,8 @@ def all_requirements():
         with open(path, "r", encoding="utf-8") as rhdl:
             return rhdl.read().splitlines()
 
-    path: str = join(dirname(__file__), "requirements.txt")
-    requirements = read_requirements(path)
+    requirements = read_requirements(join(dirname(__file__), "requirements.txt"))  # noqa:E501
+    requirements.append(f"{__project__}-backend=={__version__}")
     return requirements
 
 
@@ -39,7 +38,7 @@ class CustomInstallCommand(install):
 
 
 setup(
-    name=__project__,
+    name=f"{__project__}-frontend",
     version=__version__,
     description=__description__,
     url=__urlhome__,
@@ -48,7 +47,7 @@ setup(
     project_urls={"Source Code": __urlcode__,
                   "Bug Tracker": __urlbugs__,
                   "Documentation": __urldocs__},
-    packages=find_packages(include=["reflex_xpw*"], exclude=["reflex_xpw.unittest"]),  # noqa:E501
+    py_modules=["reflex_xpw_defender", "reflex_xpw_frontend"],
     install_requires=all_requirements(),
     cmdclass={
         "install": CustomInstallCommand,

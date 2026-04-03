@@ -4,11 +4,10 @@ from typing import Dict
 from typing import Optional
 
 import reflex as rx
+from reflex_xpw_settings import CONFIG
 from xpw import Pass
 from xpw import Profile
 from xpw import SessionUser
-
-from .settings import CONFIG
 
 
 class AuthState(rx.State):

@@ -1,7 +1,8 @@
 [run]
 omit =
-    reflex_xpw/unittest/*
-    reflex_xpw/attribute.py
+    rxpw_*/attribute.py
+    rxpw_*/setup.py
+    attribute.py
 
 [report]
 exclude_lines =

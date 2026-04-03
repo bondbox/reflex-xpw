@@ -1,10 +1,9 @@
 from typing import Optional
 
 import reflex as rx
-
-from .backend import LoginState
-from .backend import LogoutState
-from .settings import CONFIG
+from reflex_xpw_backend import LoginState
+from reflex_xpw_backend import LogoutState
+from reflex_xpw_settings import CONFIG
 
 
 class BasePage():  # pylint: disable=too-few-public-methods

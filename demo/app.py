@@ -1,9 +1,16 @@
+from os.path import dirname
+from os.path import join
+import sys
+
 import reflex as rx
 
-from reflex_xpw import Defender
-from reflex_xpw import LoginPage
-from reflex_xpw import LogoutPage
-from reflex_xpw import LogoutState
+sys.path.insert(0, join(dirname(__file__), "..", "rxpw_backend"))
+sys.path.insert(0, join(dirname(__file__), "..", "rxpw_frontend"))
+
+from reflex_xpw_backend import LogoutState
+from reflex_xpw_defender import Defender
+from reflex_xpw_frontend import LoginPage
+from reflex_xpw_frontend import LogoutPage
 
 
 @rx.page(route="/about")
