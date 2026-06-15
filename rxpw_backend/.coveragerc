@@ -1,0 +1,18 @@
+[run]
+omit = 
+	attribute.py
+	test_backend.py
+	test_settings.py
+source = 
+	reflex_xpw_backend
+	reflex_xpw_settings
+
+[report]
+exclude_lines = 
+	pragma: no cover
+	raise NotImplementedError
+	if __name__ == .__main__.:
+	def __repr__
+	pass
+fail_under = 100
+

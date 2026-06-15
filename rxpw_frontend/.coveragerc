@@ -1,0 +1,18 @@
+[run]
+omit = 
+	attribute.py
+	test_defender.py
+	test_integration.py
+source = 
+	reflex_xpw_defender
+	reflex_xpw_frontend
+
+[report]
+exclude_lines = 
+	pragma: no cover
+	raise NotImplementedError
+	if __name__ == .__main__.:
+	def __repr__
+	pass
+fail_under = 100
+

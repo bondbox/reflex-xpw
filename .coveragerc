@@ -1,13 +1,19 @@
 [run]
-omit =
-    rxpw_*/attribute.py
-    rxpw_*/setup.py
-    attribute.py
+omit = 
+	rxpw_backend/attribute.py
+	rxpw_frontend/attribute.py
+source = 
+	rxpw_backend/reflex_xpw_backend
+	rxpw_backend/reflex_xpw_settings
+	rxpw_frontend/reflex_xpw_defender
+	rxpw_frontend/reflex_xpw_frontend
 
 [report]
-exclude_lines =
-    pragma: no cover
-    raise NotImplementedError
-    if __name__ == .__main__.:
-    def __repr__
-    pass
+exclude_lines = 
+	pragma: no cover
+	raise NotImplementedError
+	if __name__ == .__main__.:
+	def __repr__
+	pass
+fail_under = 100
+

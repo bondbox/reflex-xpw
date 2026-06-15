@@ -1,16 +1,10 @@
 # coding:utf-8
 
 from inspect import unwrap
-from os.path import dirname
-from os.path import join
-import sys
 from unittest import TestCase
 from unittest import main
 
 import reflex as rx
-
-sys.path.insert(0, join(dirname(__file__), "..", "..", "rxpw_backend"))
-sys.path.insert(0, join(dirname(__file__), "..", "..", "rxpw_frontend"))
 
 from reflex_xpw_defender import Defender
 

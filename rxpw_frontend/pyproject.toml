@@ -1,0 +1,55 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    "hatch-requirements-txt",
+    "hatchling",
+]
+
+[project]
+authors = [
+    { name = "Mingzhe Zou", email = "zoumingzhe@outlook.com" },
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+description = "Frontend for Reflex applications based on xpw"
+dynamic = [
+    "dependencies",
+    "version",
+]
+keywords = []
+name = "reflex-xpw-frontend"
+requires-python = ">=3.10"
+
+[project.license]
+file = "LICENSE"
+
+[project.readme]
+content-type = "text/markdown"
+file = "readme.md"
+
+[project.scripts]
+
+[project.urls]
+Homepage = "https://github.com/bondbox/reflex-xpw/"
+
+[tool.hatch.build.targets.sdist]
+packages = [
+    "reflex_xpw_defender.py",
+    "reflex_xpw_frontend.py",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "reflex_xpw_defender.py",
+    "reflex_xpw_frontend.py",
+]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = [
+    "requirements.txt",
+]
+
+[tool.hatch.version]
+path = "attribute.py"

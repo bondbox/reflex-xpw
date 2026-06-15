@@ -1,0 +1,78 @@
+name = "reflex-xpw"
+home = "https://github.com/bondbox/reflex-xpw/"
+description = "Simple access control for Reflex applications based on xpw"
+keywords = []
+version = "0.2"
+
+[authors.zoumingzhe]
+name = "Mingzhe Zou"
+email = "zoumingzhe@outlook.com"
+
+[packages.reflex-xpw-backend]
+base = "rxpw_backend"
+description = "Backend for Reflex applications based on xpw"
+requires_python = ">=3.10"
+authors = [
+    "zoumingzhe",
+]
+keywords = []
+requirements = [
+    "reflex>=0.8.1",
+    "xkits-config>=0.9",
+    "xpw>=0.17",
+]
+build_backend = "hatchling"
+max_complexity = 10
+max_line_length = 127
+
+[packages.reflex-xpw-backend.modules.source]
+base = "."
+package = [
+    "reflex_xpw_backend.py",
+    "reflex_xpw_settings.py",
+]
+exclude = []
+omitted = [
+    "attribute.py",
+    "test_backend.py",
+    "test_settings.py",
+]
+
+[packages.reflex-xpw-backend.modules.source.scripts]
+
+[packages.reflex-xpw-backend.modules.source.templates]
+"attribute.py" = true
+
+[packages.reflex-xpw-frontend]
+base = "rxpw_frontend"
+description = "Frontend for Reflex applications based on xpw"
+requires_python = ">=3.10"
+authors = [
+    "zoumingzhe",
+]
+keywords = []
+requirements = [
+    "reflex>=0.8.1",
+    "reflex-xpw-backend",
+]
+build_backend = "hatchling"
+max_complexity = 10
+max_line_length = 127
+
+[packages.reflex-xpw-frontend.modules.source]
+base = "."
+package = [
+    "reflex_xpw_defender.py",
+    "reflex_xpw_frontend.py",
+]
+exclude = []
+omitted = [
+    "attribute.py",
+    "test_defender.py",
+    "test_integration.py",
+]
+
+[packages.reflex-xpw-frontend.modules.source.scripts]
+
+[packages.reflex-xpw-frontend.modules.source.templates]
+"attribute.py" = true
