@@ -28,6 +28,8 @@ $(foreach op,$(OPS),$(foreach pkg,$(SUBPKGS),$(eval $(call make_target_rule,$(op
 test: $(foreach pkg,$(SUBPKGS),test-$(pkg))
 build: $(foreach pkg,$(SUBPKGS),build-$(pkg))
 clean: $(foreach pkg,$(SUBPKGS),clean-$(pkg))
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	rm -rf .states .web reflex.lock
 install: $(foreach pkg,$(SUBPKGS),install-$(pkg))
 uninstall: $(foreach pkg,$(SUBPKGS),uninstall-$(pkg))
 reinstall: $(foreach pkg,$(SUBPKGS),reinstall-$(pkg))

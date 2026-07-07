@@ -57,3 +57,4 @@ clean-cover:
 clean-tox:
 	rm -rf .stestr .tox
 clean: build-clean test-clean clean-cover clean-tox
+	rm -rf screenshots
