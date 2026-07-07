@@ -1,2 +1,2 @@
 reflex>=0.8.1
-reflex-xpw-backend>=0.2
+reflex-xpw-backend>=0.3

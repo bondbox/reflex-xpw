@@ -2,7 +2,7 @@ name = "reflex-xpw"
 home = "https://github.com/bondbox/reflex-xpw/"
 description = "Simple access control for Reflex applications based on xpw"
 keywords = []
-version = "0.2"
+version = "0.3"
 
 [authors.zoumingzhe]
 name = "Mingzhe Zou"
